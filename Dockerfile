@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1-mesa-glx \
     lubuntu-desktop \
     xterm \
+    novnc \
     && rm -rf /var/lib/apt/lists/*
 
 # Install virtualgl and turbovnc
@@ -26,6 +27,8 @@ RUN wget -qO /tmp/virtualgl_${VIRTUALGL_VERSION}_amd64.deb https://sourceforge.n
     && dpkg -i /tmp/turbovnc_${TURBOVNC_VERSION}_amd64.deb \
     && rm -rf /tmp/*.deb
 
+# Generate key for novnc
+RUN openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/novnc.pem -out /etc/novnc.pem -days 365 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"
 
 ENV PATH ${PATH}:/opt/VirtualGL/bin:/opt/TurboVNC/bin
 

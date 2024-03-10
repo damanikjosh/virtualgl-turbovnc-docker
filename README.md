@@ -2,7 +2,7 @@
 
 Docker hub: [damanikjosh/virtualgl-turbovnc](https://hub.docker.com/r/damanikjosh/virtualgl-turbovnc)
 
-This image is based on the [nvidia/opengl](https://hub.docker.com/r/nvidia/opengl) image and adds [VirtualGL](https://www.virtualgl.org/) and [TurboVNC](https://www.turbovnc.org/) to it. It is intended to be used as a base image for running graphical applications in a Docker container.
+This image is based on the [nvidia/opengl](https://hub.docker.com/r/nvidia/opengl) image and adds [VirtualGL](https://www.virtualgl.org/), [TurboVNC](https://www.turbovnc.org/), and [noVNC](https://novnc.com/info.html) to it. It is intended to be used as a base image for running graphical applications in a Docker container.
 
 ## Tags
 
@@ -121,8 +121,7 @@ sudo reboot
 
 ## Usage
 
-You can use this image to run graphical applications in a Docker container. You can use the `vglrun` command to run the graphical applications.
-
+You can use this image to run graphical applications in a Docker container. You can use the `vglrun` command to run the graphical applications using VirtualGL.
 
 ```bash
 docker run --gpus all --rm -it --network=host -e DISPLAY=:1 damanikjosh/virtualgl-turbovnc:latest vglrun glxspheres64
@@ -152,7 +151,14 @@ OpenGL Renderer: NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2
 
 ```
 
-To access the TurboVNC server, you can use a VNC client to connect to the host system on port `5900 + DISPLAY`. You can use the password you set when you ran the `docker run` command.
+You  can customize the container using the following environment variables:
+- `DISPLAY`: The display number to use for VNC. Default is `:10`.
+- `VGL_DISPLAY`: The display number to use for VirtualGL. Default is `:0`.
+- `VNC_PASSWORD`: The password for the VNC server. If not set, you will be prompted to enter a password when you run the container.
+- `VNC_RESOLUTION`: The resolution of the VNC server. Default is `1280x800`.
+- `NOVNC_PORT`: The port on which the noVNC server will listen. Default is `8080`.
+
+To access the VNC server, you can use a VNC client to connect to `localhost:$((5900 + DISPLAY))`. You can also use a web browser to access the noVNC server at `http://localhost:${NOVNC_PORT}`.
 
 [![Screenshot](screenshot.png)](screenshot.png)
 
